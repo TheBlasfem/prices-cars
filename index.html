@@ -22,6 +22,23 @@
         }
       });
 
+      var FilterCar = React.createClass({
+        handleChange: function(){
+          var hash = {};
+          hash[this.props.fieldName] = this.refs.filterOptionNode.getDOMNode().value;
+          this.props.userInput(hash);
+        },
+        render: function(){
+          return (
+            <select onChange={this.handleChange} ref="filterOptionNode">
+              <option value="">Select one...</option>
+              <option>chevrolet</option>
+              <option>toyota</option>
+            </select>
+          );
+        }
+      });
+
       var Car = React.createClass({
         render: function(){
           return (
@@ -50,6 +67,7 @@
         render: function(){
           var car_nodes = this.state.data.map(function(car){
             if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
+            if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
             return (
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
@@ -70,12 +88,16 @@
         handleChangeSearch: function(keyword){
           this.setState({filterText: keyword});
         },
+        handleChangeFilter: function(state){
+          this.setState(state);
+        },
         render: function(){
           return (
             <div>
               <SearchCar filterText={this.state.filterText}
               userInput={this.handleChangeSearch} />
-              <CarList filterText={this.state.filterText} />
+              <FilterCar fieldName="brand" userInput={this.handleChangeFilter} />
+              <CarList filterText={this.state.filterText} filterBrand={this.state.brand}/>
             </div>
           );
         }
