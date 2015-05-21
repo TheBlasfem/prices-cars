@@ -29,11 +29,16 @@
           this.props.userInput(hash);
         },
         render: function(){
+          var h = {};
+          h["brand"] = ["chevrolet", "toyota"];
+          h["model"] = ["vivant", "whatever"];
+          var options = h[this.props.fieldName].map(function(item){
+            return (<option>{item}</option>);
+          });
           return (
             <select onChange={this.handleChange} ref="filterOptionNode">
               <option value="">Select one...</option>
-              <option>chevrolet</option>
-              <option>toyota</option>
+              {options}
             </select>
           );
         }
@@ -68,6 +73,7 @@
           var car_nodes = this.state.data.map(function(car){
             if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
             if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
+            if(this.props.filterModel && car.model != this.props.filterModel) return;
             return (
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
@@ -97,7 +103,8 @@
               <SearchCar filterText={this.state.filterText}
               userInput={this.handleChangeSearch} />
               <FilterCar fieldName="brand" userInput={this.handleChangeFilter} />
-              <CarList filterText={this.state.filterText} filterBrand={this.state.brand}/>
+              <FilterCar fieldName="model" userInput={this.handleChangeFilter} />
+              <CarList filterText={this.state.filterText} filterBrand={this.state.brand} filterModel={this.state.model}/>
             </div>
           );
         }
