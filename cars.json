@@ -1,0 +1,14 @@
+[
+  {
+    "brand": "chevrolet",
+    "model": "vivant",
+    "year": "2007",
+    "price": "7000"
+  },
+  {
+    "brand": "toyota",
+    "model": "whatever",
+    "year": "2004",
+    "price": "6000"
+  }
+]

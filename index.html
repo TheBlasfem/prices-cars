@@ -9,21 +9,6 @@
   <body>
     <div id="example"></div>
     <script type="text/jsx">
-      var cars = [
-        {
-          brand: "chevrolet",
-          model: "vivant",
-          year: "2007",
-          price: "7000"
-        },
-        {
-          brand: "toyota",
-          model: "whatever",
-          year: "2004",
-          price: "6000"
-        }
-      ];
-
       var Car = React.createClass({
         render: function(){
           return (
@@ -37,8 +22,20 @@
       });
 
       var CarList = React.createClass({
+        getInitialState: function(){
+          return {data: []};
+        },
+        componentDidMount: function(){
+          $.ajax({
+            url: 'cars.json',
+            dataType: 'json',
+            success: function(data){
+              this.setState({data: data});
+            }.bind(this)
+          });
+        },
         render: function(){
-          var car_nodes = this.props.data.map(function(car){
+          var car_nodes = this.state.data.map(function(car){
             return (
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
@@ -53,7 +50,7 @@
       });
 
       React.render(
-        <CarList data={cars} />,
+        <CarList/>,
         document.getElementById('example')
       );
     </script>
