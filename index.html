@@ -9,6 +9,21 @@
   <body>
     <div id="example"></div>
     <script type="text/jsx">
+      var cars = [
+        {
+          brand: "chevrolet",
+          model: "vivant",
+          year: "2007",
+          price: "7000"
+        },
+        {
+          brand: "toyota",
+          model: "whatever",
+          year: "2004",
+          price: "6000"
+        }
+      ];
+
       var Car = React.createClass({
         render: function(){
           return (
@@ -23,17 +38,22 @@
 
       var CarList = React.createClass({
         render: function(){
+          var car_nodes = this.props.data.map(function(car){
+            return (
+              <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
+            );
+          });
           return (
             <div className="car-list">
               <h1>List of Cars</h1>
-              <Car brand="chevrolet" model="vivant" year="2007" price="7000"></Car>
+              {car_nodes}
             </div>
           );
         }
       });
 
       React.render(
-        <CarList />,
+        <CarList data={cars} />,
         document.getElementById('example')
       );
     </script>
