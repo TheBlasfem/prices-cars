@@ -9,11 +9,24 @@
   <body>
     <div id="example"></div>
     <script type="text/jsx">
+      var Car = React.createClass({
+        render: function(){
+          return (
+            <div className="car-item">
+              <span>{this.props.brand}</span>  
+              <h3>{this.props.model}</h3>
+              <p>{this.props.year} - {this.props.price}</p>
+            </div>
+          );
+        }
+      });
+
       var CarList = React.createClass({
         render: function(){
           return (
-            <div class="car-list">
-              This is the list of the cars.
+            <div className="car-list">
+              <h1>List of Cars</h1>
+              <Car brand="chevrolet" model="vivant" year="2007" price="7000"></Car>
             </div>
           );
         }
