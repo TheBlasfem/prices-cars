@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Prices Cars</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="build/react.js"></script>
     <script src="build/JSXTransformer.js"></script>
   </head>
   <body>
     <div id="example"></div>
     <script type="text/jsx">
+      var CarList = React.createClass({
+        render: function(){
+          return (
+            <div class="car-list">
+              This is the list of the cars.
+            </div>
+          );
+        }
+      });
+
       React.render(
-        <h1>Hello, world!</h1>,
+        <CarList />,
         document.getElementById('example')
       );
     </script>
