@@ -9,6 +9,16 @@
   <body>
     <div id="example"></div>
     <script type="text/jsx">
+      var SearchCar = React.createClass({
+        render: function(){
+          return (
+            <form>
+              <input type="text" placeholder="Search..." value={this.props.filterText} />
+            </form>
+          );
+        }
+      });
+
       var Car = React.createClass({
         render: function(){
           return (
@@ -36,10 +46,11 @@
         },
         render: function(){
           var car_nodes = this.state.data.map(function(car){
+            if (car.brand.indexOf(this.props.filterText) === -1) return;
             return (
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
-          });
+          }.bind(this));
           return (
             <div className="car-list">
               <h1>List of Cars</h1>
@@ -49,8 +60,22 @@
         }
       });
 
+      var FilterableCar = React.createClass({
+        getInitialState: function(){
+          return {filterText: ''};
+        },
+        render: function(){
+          return (
+            <div>
+              <SearchCar filterText={this.state.filterText} />
+              <CarList filterText={this.state.filterText} />
+            </div>
+          );
+        }
+      });
+
       React.render(
-        <CarList/>,
+        <FilterableCar/>,
         document.getElementById('example')
       );
     </script>
