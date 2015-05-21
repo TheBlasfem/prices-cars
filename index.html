@@ -10,10 +10,13 @@
     <div id="example"></div>
     <script type="text/jsx">
       var SearchCar = React.createClass({
+        handleChange: function(){
+          this.props.userInput(this.refs.filterTextNode.getDOMNode().value);
+        },
         render: function(){
           return (
             <form>
-              <input type="text" placeholder="Search..." value={this.props.filterText} />
+              <input type="text" placeholder="Search..." value={this.props.filterText} ref="filterTextNode" onChange={this.handleChange} />
             </form>
           );
         }
@@ -46,7 +49,7 @@
         },
         render: function(){
           var car_nodes = this.state.data.map(function(car){
-            if (car.brand.indexOf(this.props.filterText) === -1) return;
+            if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
             return (
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
@@ -64,10 +67,14 @@
         getInitialState: function(){
           return {filterText: ''};
         },
+        handleChangeSearch: function(keyword){
+          this.setState({filterText: keyword});
+        },
         render: function(){
           return (
             <div>
-              <SearchCar filterText={this.state.filterText} />
+              <SearchCar filterText={this.state.filterText}
+              userInput={this.handleChangeSearch} />
               <CarList filterText={this.state.filterText} />
             </div>
           );
