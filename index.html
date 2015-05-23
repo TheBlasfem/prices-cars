@@ -3,6 +3,7 @@
   <head>
     <title>Prices Cars</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.0/lodash.min.js"></script>
     <script src="build/react.js"></script>
     <script src="build/JSXTransformer.js"></script>
     <script src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
@@ -32,8 +33,9 @@
         },
         render: function(){
           var h = {};
-          h["brand"] = ["Chevrolet", "Toyota"];
-          h["model"] = ["Vivant", "Whatever"];
+          h[this.props.fieldName] = _.uniq(this.props.cars.map(function(car){
+            return car[this.props.fieldName];
+          }.bind(this)));
           var options = h[this.props.fieldName].map(function(item){
             return (<option>{item}</option>);
           });
@@ -59,15 +61,8 @@
       });
 
       var CarList = React.createClass({
-        mixins: [ReactFireMixin],
-        getInitialState: function(){
-          return {cars: []};
-        },
-        componentWillMount: function(){
-          this.bindAsArray(new Firebase("https://prices-cars.firebaseio.com/cars/"), "cars");
-        },
         render: function(){
-          var car_nodes = this.state.cars.map(function(car){
+          var car_nodes = this.props.cars.map(function(car){
             if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
             if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
             if(this.props.filterModel && car.model != this.props.filterModel) return;
@@ -85,8 +80,12 @@
       });
 
       var FilterableCar = React.createClass({
+        mixins: [ReactFireMixin],
         getInitialState: function(){
-          return {filterText: ''};
+          return {cars: [], filterText: ''};
+        },
+        componentWillMount: function(){
+          this.bindAsArray(new Firebase("https://prices-cars.firebaseio.com/cars/"), "cars");
         },
         handleChangeSearch: function(keyword){
           this.setState({filterText: keyword});
@@ -99,9 +98,9 @@
             <div>
               <SearchCar filterText={this.state.filterText}
               userInput={this.handleChangeSearch} />
-              <FilterCar fieldName="brand" userInput={this.handleChangeFilter} />
-              <FilterCar fieldName="model" userInput={this.handleChangeFilter} />
-              <CarList filterText={this.state.filterText} filterBrand={this.state.brand} filterModel={this.state.model}/>
+              <FilterCar fieldName="brand" userInput={this.handleChangeFilter} cars={this.state.cars} />
+              <FilterCar fieldName="model" userInput={this.handleChangeFilter} cars={this.state.cars} />
+              <CarList filterText={this.state.filterText} filterBrand={this.state.brand} filterModel={this.state.model} cars={this.state.cars}/>
             </div>
           );
         }
