@@ -33,15 +33,15 @@
         },
         render: function(){
           var h = {};
-          h[this.props.fieldName] = _.uniq(this.props.cars.map(function(car){
+          h[this.props.fieldName] = _.sortBy(_.uniq(this.props.cars.map(function(car){
             return car[this.props.fieldName];
-          }.bind(this)));
+          }.bind(this))));
           var options = h[this.props.fieldName].map(function(item){
             return (<option>{item}</option>);
           });
           return (
             <select className="form-control" onChange={this.handleChange} ref="filterOptionNode">
-              <option value="">Select one...</option>
+              <option value="">{_.capitalize(this.props.fieldName)}...</option>
               {options}
             </select>
           );
