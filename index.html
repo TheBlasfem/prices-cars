@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>Prices Cars</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.0/lodash.min.js"></script>
     <script src="build/react.js"></script>
     <script src="build/JSXTransformer.js"></script>
@@ -10,7 +12,7 @@
     <script src="https://cdn.firebase.com/libs/reactfire/0.1.6/reactfire.min.js"></script>
   </head>
   <body>
-    <div id="example"></div>
+    <div id="root" class="container"></div>
     <script type="text/jsx">
       var SearchCar = React.createClass({
         handleChange: function(){
@@ -18,9 +20,7 @@
         },
         render: function(){
           return (
-            <form>
-              <input type="text" placeholder="Search..." value={this.props.filterText} ref="filterTextNode" onChange={this.handleChange} />
-            </form>
+            <input type="text" autoFocus className="form-control" placeholder="Search..." value={this.props.filterText} ref="filterTextNode" onChange={this.handleChange} />
           );
         }
       });
@@ -40,7 +40,7 @@
             return (<option>{item}</option>);
           });
           return (
-            <select onChange={this.handleChange} ref="filterOptionNode">
+            <select className="form-control" onChange={this.handleChange} ref="filterOptionNode">
               <option value="">Select one...</option>
               {options}
             </select>
@@ -51,11 +51,12 @@
       var Car = React.createClass({
         render: function(){
           return (
-            <div className="car-item">
-              <span>{this.props.brand}</span>  
-              <h3>{this.props.model}</h3>
-              <p>{this.props.year} - {this.props.price}</p>
-            </div>
+            <tr>
+              <td>{this.props.brand}</td>  
+              <td>{this.props.model}</td>
+              <td>{this.props.year}</td>
+              <td>${this.props.price}</td>
+            </tr>
           );
         }
       });
@@ -70,11 +71,20 @@
               <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
             );
           }.bind(this));
-          return (
-            <div className="car-list">
-              <h1>List of Cars</h1>
-              {car_nodes}
-            </div>
+          return (  
+            <table className="table table-hover table-bordered" style={{marginTop: '18px'}}>
+              <thead>
+                <tr>
+                  <th>Brand</th>
+                  <th>Model</th>
+                  <th>Year</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {car_nodes}
+              </tbody>
+            </table>
           );
         }
       });
@@ -96,10 +106,15 @@
         render: function(){
           return (
             <div>
-              <SearchCar filterText={this.state.filterText}
-              userInput={this.handleChangeSearch} />
-              <FilterCar fieldName="brand" userInput={this.handleChangeFilter} cars={this.state.cars} />
-              <FilterCar fieldName="model" userInput={this.handleChangeFilter} cars={this.state.cars} />
+              <h1 className="text-center">List of Cars</h1>
+              <div className="form-inline row">
+                <div className="form-group col-md-6 col-md-offset-3">
+                  <SearchCar filterText={this.state.filterText}
+                userInput={this.handleChangeSearch} />
+                  <FilterCar fieldName="brand" userInput={this.handleChangeFilter} cars={this.state.cars} />
+                  <FilterCar fieldName="model" userInput={this.handleChangeFilter} cars={this.state.cars} />
+                </div>
+              </div>
               <CarList filterText={this.state.filterText} filterBrand={this.state.brand} filterModel={this.state.model} cars={this.state.cars}/>
             </div>
           );
@@ -108,7 +123,7 @@
 
       React.render(
         <FilterableCar/>,
-        document.getElementById('example')
+        document.getElementById('root')
       );
     </script>
   </body>
