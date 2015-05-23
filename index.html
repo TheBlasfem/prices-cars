@@ -55,7 +55,7 @@
               <td>{this.props.brand}</td>  
               <td>{this.props.model}</td>
               <td>{this.props.year}</td>
-              <td>${this.props.price}</td>
+              <td>${this.props.pricemin} - ${this.props.pricemax}</td>
             </tr>
           );
         }
@@ -69,7 +69,7 @@
             if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
             if(this.props.filterModel && car.model != this.props.filterModel) return;
             return (
-              <Car brand={car.brand} model={car.model} year={car.year} price={car.price} ></Car>
+              <Car brand={car.brand} model={car.model} year={car.year} pricemin={car.pricemin} pricemax={car.pricemax} ></Car>
             );
           }.bind(this));
           return (  
