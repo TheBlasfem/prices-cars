@@ -5,6 +5,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="build/react.js"></script>
     <script src="build/JSXTransformer.js"></script>
+    <script src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/reactfire/0.1.6/reactfire.min.js"></script>
   </head>
   <body>
     <div id="example"></div>
@@ -30,8 +32,8 @@
         },
         render: function(){
           var h = {};
-          h["brand"] = ["chevrolet", "toyota"];
-          h["model"] = ["vivant", "whatever"];
+          h["brand"] = ["Chevrolet", "Toyota"];
+          h["model"] = ["Vivant", "Whatever"];
           var options = h[this.props.fieldName].map(function(item){
             return (<option>{item}</option>);
           });
@@ -57,20 +59,15 @@
       });
 
       var CarList = React.createClass({
+        mixins: [ReactFireMixin],
         getInitialState: function(){
-          return {data: []};
+          return {cars: []};
         },
-        componentDidMount: function(){
-          $.ajax({
-            url: 'cars.json',
-            dataType: 'json',
-            success: function(data){
-              this.setState({data: data});
-            }.bind(this)
-          });
+        componentWillMount: function(){
+          this.bindAsArray(new Firebase("https://prices-cars.firebaseio.com/cars/"), "cars");
         },
         render: function(){
-          var car_nodes = this.state.data.map(function(car){
+          var car_nodes = this.state.cars.map(function(car){
             if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
             if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
             if(this.props.filterModel && car.model != this.props.filterModel) return;
