@@ -64,7 +64,8 @@
       var CarList = React.createClass({
         render: function(){
           var car_nodes = this.props.cars.map(function(car){
-            if (car.brand.indexOf(this.props.filterText) === -1 && car.model.indexOf(this.props.filterText) === -1) return;
+            var lower_brand = car.brand.toLowerCase(), lower_model = car.model.toLowerCase();
+            if (lower_brand.indexOf(this.props.filterText.toLowerCase()) === -1 && lower_model.indexOf(this.props.filterText.toLowerCase()) === -1) return;
             if(this.props.filterBrand && car.brand != this.props.filterBrand) return;
             if(this.props.filterModel && car.model != this.props.filterModel) return;
             return (
